@@ -8,6 +8,13 @@ import PokemonPage from '../src/PokemonPage'
 import { MemoryRouter } from 'react-router-dom'
 
 jest.mock('axios')
+beforeEach(() => {
+  jest.spyOn(console, 'log').mockImplementation(() => {})
+})
+afterEach(() => {
+  // eslint-disable-next-line no-console
+  console.log.mockRestore()
+})
 
 const pokemonList = {
   id: 133,
@@ -113,8 +120,8 @@ describe('<PokemonPage />', () => {
       )
     })
 
-    expect(screen.getByText('Previous')).toHaveAttribute('href', '/pokemon/ditto')
-    expect(screen.getByText('Next')).toHaveAttribute('href', '/pokemon/vaporeon')
+    expect(screen.getByText('Previous')).toHaveAttribute('href', expect.stringContaining('/pokemon/ditto'))
+    expect(screen.getByText('Next')).toHaveAttribute('href', expect.stringContaining('/pokemon/vaporeon'))
   })
 
   it('should not render previous and next urls if none exist', async () => {

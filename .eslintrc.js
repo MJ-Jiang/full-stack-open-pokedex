@@ -45,6 +45,21 @@ module.exports = {
       'error', { 'before': true, 'after': true }
     ],
     'no-console': 'error',
-    'react/prop-types': 0
-  }
+    'react/prop-types': 0,
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+  },
+  overrides: [
+    {
+      files: ['cypress/**/*.js', 'cypress/**/*.cy.js', 'cypress.config.js'],
+      env: { browser: true, node: true },
+      globals: {
+        cy: 'readonly',
+        Cypress: 'readonly',
+      },
+      rules: {
+
+      },
+    },
+  ],
+
 }

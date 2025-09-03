@@ -32,6 +32,15 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(join(github.event.commits.*.message, ' '), '#skip') }} 
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+
+      - name: Notification Failure
+        uses: rjstone/discord-webhook-notify@v2
+        if: failure()
+        with:
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            severity: error
+            details: Notification of failure!
+
   tag_release:    
     needs: [simple_deployment_pipeline]
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(join(github.event.commits.*.message, ' '), '#skip')}}
@@ -47,6 +56,13 @@ jobs:
         env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            DEFAULT_BUMP: patch
+      - name: Notification Success
+        uses: rjstone/discord-webhook-notify@v2
+        if: success()
+        with:
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            severity: info
+            details: Notification of scuess!
 
 
 
